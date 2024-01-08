@@ -36,11 +36,11 @@ async function connectDB() {
     // }
     // }
 
-    await dboper.insertDocument(db, { name: "Vadonout", description: "Test" }, "dishes",
-        () => {
-            dboper.findDocuments(db, "dishes",
-                () => {
-                    dboper.updateDocument(db, { name: "Vadonut" }, { description: "Updated Test" }, "dishes",
+    await dboper.insertDocument(db, { name: "Vadonut", description: "Test" }, "dishes",
+        async () => {
+            await dboper.findDocuments(db, "dishes",
+                async () => {
+                    await dboper.updateDocument(db, { name: "Vadonut" }, { description: "Updated Test" }, "dishes",
                         () => {
                             dboper.findDocuments(db, "dishes",
                                 (db, client) => {
