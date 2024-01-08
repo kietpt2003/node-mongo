@@ -28,38 +28,28 @@ async function connectDB() {
     assert.equal(isDrop, true, 'Drop fail');
     // if (isDrop) {
     console.log('Drop success: ', isDrop);
-    client.close();
-    console.log('Client Close');
+    // client.close();
+    // console.log('Client Close');
     // } else {
     //     console.log('Drop fail');
     // }
     // }
     // }
 
-    // dboper.insertDocument(db, { name: "Vadonut", description: "Test" },
-    //     "dishes", (result) => {
-    //         console.log("Insert Document:\n", result.ops);
-
-    //         dboper.findDocuments(db, "dishes", (docs) => {
-    //             console.log("Found Documents:\n", docs);
-
-    //             dboper.updateDocument(db, { name: "Vadonut" },
-    //                 { description: "Updated Test" }, "dishes",
-    //                 (result) => {
-    //                     console.log("Updated Document:\n", result.result);
-
-    //                     dboper.findDocuments(db, "dishes", (docs) => {
-    //                         console.log("Found Updated Documents:\n", docs);
-
-    //                         db.dropCollection("dishes", (result) => {
-    //                             console.log("Dropped Collection: ", result);
-
-    //                             client.close();
-    //                         });
-    //                     });
-    //                 });
-    //         });
-    //     });
+    await dboper.insertDocument(db, { name: "Vadonout", description: "Test" }, "dishes",
+        () => {
+            dboper.findDocuments(db, "dishes",
+                () => {
+                    dboper.updateDocument(db, { name: "Vadonut" }, { description: "Updated Test" }, "dishes",
+                        () => {
+                            dboper.findDocuments(db, "dishes",
+                                (db, client) => {
+                                    db.dropCollection("dishes");
+                                    client.close();
+                                })
+                        })
+                })
+        })
 
 
     return 'done.';
@@ -68,33 +58,3 @@ async function connectDB() {
 connectDB()
     .then(console.log)
     .catch(console.error)
-
-// MongoClient.connect(url, (err, client) => {
-
-//     assert.equal(err, null);
-//     console.log('Connected correctly to server');
-
-//     const db = client.db(dbname);
-//     const collection = db.collection("dishes");
-//     collection.insertOne({ "name": "Uthappizza", "description": "test" },
-//         (err, result) => {
-//             assert.equal(err, null);
-
-//             console.log("After Insert:\n");
-//             console.log(result.ops);
-
-//             collection.find({}).toArray((err, docs) => {
-//                 assert.equal(err, null);
-
-//                 console.log("Found:\n");
-//                 console.log(docs);
-
-//                 db.dropCollection("dishes", (err, result) => {
-//                     assert.equal(err, null);
-
-//                     client.close();
-//                 });
-//             });
-//         });
-
-// });
