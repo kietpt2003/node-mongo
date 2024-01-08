@@ -26,13 +26,12 @@ exports.removeDocument = (db, document, collection, callback) => {
     });
 };
 
-exports.updateDocument = (db, document, update, collection, callback) => {
+exports.updateDocument = async (db, document, update, collection, callback) => {
     const coll = db.collection(collection);
-    coll.updateOne(document, { $set: update }, null, (err, result) => {
-        assert.equal(err, null);
-        console.log("Updated the document with ", update);
-        callback(result);
-    });
+    const updateDish = await coll.updateOne(document, { $set: update }, null);
+    assert.notEqual(updateDish, {});
+    console.log("Updated the document with ", updateDish);
+    callback();
 };
 
 
