@@ -26,7 +26,7 @@ async function connectDB() {
     console.log("Found:\n", arrDishes);
     const isDrop = await db.dropCollection("dishes");
     assert.equal(isDrop, true, 'Drop fail');
-    // if (isDrop) {
+    // // if (isDrop) {
     console.log('Drop success: ', isDrop);
     // client.close();
     // console.log('Client Close');
@@ -41,12 +41,18 @@ async function connectDB() {
             await dboper.findDocuments(db, "dishes",
                 async () => {
                     await dboper.updateDocument(db, { name: "Vadonut" }, { description: "Updated Test" }, "dishes",
-                        () => {
-                            dboper.findDocuments(db, "dishes",
-                                (db, client) => {
-                                    db.dropCollection("dishes");
-                                    client.close();
-                                })
+                        async () => {
+                            await dboper.findDocuments(db, "dishes",
+                                async () => {
+                                    await dboper.removeDocument(db, { name: "Vadonut" }, "dishes",
+                                        async () => {
+                                            await db.dropCollection("dishes");
+                                            console.log("Dropped Collection: dishes");
+                                            client.close();
+                                            console.log("Client closed");
+                                        })
+                                }
+                            )
                         })
                 })
         })
