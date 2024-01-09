@@ -17,13 +17,12 @@ exports.findDocuments = async (db, collection, callback) => {
     callback();
 };
 
-exports.removeDocument = (db, document, collection, callback) => {
+exports.removeDocument = async (db, document, collection, callback) => {
     const coll = db.collection(collection);
-    coll.deleteOne(document, (err, result) => {
-        assert.equal(err, null);
-        console.log("Removed the document ", document);
-        callback(result);
-    });
+    const countDelete = await coll.deleteOne(document);
+    assert.notEqual(countDelete.deletedCount, 0, 'Delete nothing');
+    console.log("Removed the document ", document);
+    callback();
 };
 
 exports.updateDocument = async (db, document, update, collection, callback) => {
