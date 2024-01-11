@@ -14,7 +14,6 @@ async function connectDB() {
     const collection = db.collection('dishes');
 
     const results = await collection.insertOne({ "name": "Uthappizza", "description": "test" });
-
     // if (results) {
     assert.notEqual(results, {}, 'Insert Fail');
     console.log("After Insert:\n");
